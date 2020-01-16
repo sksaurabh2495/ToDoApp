@@ -1,33 +1,11 @@
-import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, EDIT_TODO} from '../actions/actionsTypes'
+import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, EDIT_TODO, UPDATE_TASK} from '../actions/actionsTypes'
 
-const INITIAL_DATA =  [
-  {
-    id: 0,
-    text: 'Walk the Dog',
-  },
-  {
-    id:1,
-    text: 'Saturday morning run',
-  },
-  {
-    id:2,
-    text: 'Buy socks',
-  },
-  {
-    id:3,
-    text: 'Call mom',
-  },
-  {
-    id:4,
-    text: 'Coorg trip',
-  },
-  {
-    id:5,
-    text: 'Finish video',
-  }
- ]
+
+var INITIAL_DATA = [];
+var stateRef;
 
 const TodoReducer = (state=INITIAL_DATA, action) => {
+  stateRef = state;
   switch (action.type){
     case ADD_TODO:
       return [
@@ -45,9 +23,27 @@ const TodoReducer = (state=INITIAL_DATA, action) => {
     case EDIT_TODO:
       const numIndex2 = parseInt(action.id)
       return state.map(todo => (todo.id === numIndex2) ? {...todo, text: action.value} : todo)
+    case UPDATE_TASK:
+      //const newState = (action.value);
+      const axios = require('axios');
+      let newState = [];
+      axios.get('https://todo-backend-express-csp.herokuapp.com/')
+        .then(function (response) {
+        // handle success
+        newState = (response.data);
+        })
+        .catch(function (error) {
+        // handle error
+          console.log(error);
+        })
+        .finally(function () {
+        // always executed
+          return [...state, newState]
+        });
     default:
       return state
   }
+
 }
 
 export default TodoReducer

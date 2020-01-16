@@ -1,4 +1,4 @@
-import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, EDIT_TODO } from './actionsTypes'
+import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, EDIT_TODO, UPDATE_TASK } from './actionsTypes'
 
 let TodoId = 10
 
@@ -26,5 +26,10 @@ export const setVisibilityFilter = filter => ({
 export const editTodo = (id, value) => ({
     type: EDIT_TODO,
     id: id,
+    value: value
+})
+
+export const updateTask = (value) => ({
+    type: UPDATE_TASK,
     value: value
 })

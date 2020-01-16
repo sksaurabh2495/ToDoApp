@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { deleteTodo, toggleTodo, setVisibilityFilter, editTodo } from "../actions/actionCreator";
+import { deleteTodo, toggleTodo, setVisibilityFilter, editTodo, updateTask } from "../actions/actionCreator";
 import { SHOW_ALL, SHOW_COMPLETED, SHOW_ACTIVE } from "../actions/actionsTypes";
 import { bindActionCreators } from "redux";
 import "../App.css";
+
+
 
 class Table extends Component {
 
@@ -13,6 +15,7 @@ class Table extends Component {
       editId : 0
     };
   }
+
 
   editTodo2(id) {
     this.setState({editId : id});
@@ -26,6 +29,7 @@ class Table extends Component {
   }
 
   render() {
+    this.props.updateTask('update');
     return (
       <div className="col-lg-10 offset-lg-1 col-md-10 col-sm-12 col-xs-12">
         <div className="modal" tabindex="-1" role="dialog" id="exampleModalLong">
@@ -59,23 +63,23 @@ class Table extends Component {
             </thead>
             <tbody>
               {this.props.todos.map(todo => (
-                <tr key={todo.id}>
-                  <td data-key={todo.id}
+                <tr key={todo.order}>
+                  <td data-key={todo.order}
                     style={{
                       textDecoration: todo.completed ? "line-through" : "none"
                     }}
                   >
-                    {todo.text}
+                    {todo.title}
                   </td>
                   <td>
                   <span  data-toggle="modal" data-target="#exampleModalLong"
                     className="fas fa-pen"
-                    onClick={() => this.editTodo2(todo.id)}
+                    onClick={() => this.editTodo2(todo.order)}
                     style={{ color: "white", fontSize: "20pt", marginRight: "20px" }}
                   />
                     <span
                       className="fas fa-minus-circle"
-                      onClick={() => this.props.deleteTodo(todo.id)}
+                      onClick={() => this.props.deleteTodo(todo.order)}
                       style={{
                         color: "white",
                         fontSize: "20pt",
@@ -84,7 +88,7 @@ class Table extends Component {
                     />
                     <span
                       className="fas fa-check-circle"
-                      onClick={() => this.props.toggleTodo(todo.id)}
+                      onClick={() => this.props.toggleTodo(todo.order)}
                       style={{ color: "white", fontSize: "20pt" }}
                     />
                   </td>
@@ -106,6 +110,8 @@ class Table extends Component {
     );
   }
 }
+
+
 
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
@@ -132,7 +138,8 @@ const mapDispatchToProps = dispatch => {
       deleteTodo,
       toggleTodo,
       setVisibilityFilter,
-      editTodo
+      editTodo,
+      updateTask
     },
     dispatch
   );
